@@ -15,43 +15,46 @@
             <form class='form'>
 
             <div class="form-control">
-                <label for="name" class="text-muted"> Name of the product </label>
-                    <input type="text" id='name' required/>               
+                <label for="product_name" class="text-muted"> Name of the product </label>
+                    <input class='product_name' type="text"  required/>               
             </div>
 
             <div class="form-control">
                 <label class="text-muted"> Price </label>
-                <input type="number" 
+                <input class="product_price" type="number" 
                     required    
                 
                 />               
             </div>
 
             <div class="form-control">   
-               <label class="text-muted">Category</label>
-               <select required class='selector'>
-                   <option >Please Select</option> 
-                   <option >Book</option> 
-                   <option >Medical Product</option>
-                   <option >Food</option>
-                   <option >Other</option>
+               <label class="text-muted" >Category</label>
+               <select class='selector product_category'>
+                   <!-- <option  value="">Please Select</option>  -->
+                   <option value="Book" >Book</option> 
+                   <option value='Medical Product'>Medical Product</option>
+                   <option value='Food'>Food</option>
+                   <option value='Other' selected>Other</option>
                </select>
             </div>
 
             <div class="form-control">   
-                <label class="text-muted">Imported?</label>
-                <select required class='selector' >
-                    <option >Please Select</option> 
-                    <option >Yes</option> 
-                    <option >No</option>
+                <label class="text-muted ">Imported?</label>
+                <select class='selector product_imported' >
+                    <option value=''>Please Select</option> 
+                    <option  value="true">Yes</option> 
+                    <option value="false" selected>No</option>
                 </select>
              </div>
 
-             <button class="btn btn-danger">Add product</button>
+             <button class="btn btn-danger " id="add_to_list">Add product</button>
 
-             <button class="btn btn-primary">See your receipt</button>
+             <button class="submit btn btn-primary " id="get_totals">See your receipt</button>
             </form>
         </div>
+        </div>
+        <div class="container receipt">
+            Receipt goes here
         </div>
         
 
