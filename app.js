@@ -34,58 +34,65 @@ const Product = function(name, price, category, imported){
     this.price = price;
     this.category = category;    
     this.imported = imported;
+    this.totalArray= []
     
 }
 //Calculating taxes
 Product.prototype.calcTotal = function(){
     
     
-    if(this.imported === true){
+    if(this.imported === "yes"){
        
         if(this.category==="Book" || this.category==="Medical product" || this.category==="Food"){
             totalWithTax = this.price * Taxes.importTax + this.price            
            this.totalPrice = totalWithTax
            console.log(this.totalPrice )
+           this.totalArray.push({
+            name:this.name,
+            total:totalWithTax
+            
+        })
+            console.log(this.totalArray)
            return this.totalPrice
            
         }else{
             totalWithTax = (this.price * Taxes.importTax)+(this.price*Taxes.basicTax) + this.price             
             this.totalPrice = totalWithTax
            console.log(this.totalPrice )
+        //    purchasedItems.push({
+        //         name:this.name,
+        //         total:totalWithTax
+        //     })
            return this.totalPrice
         }
-    }else if(this.imported === false){
+    }else if(this.imported === "no"){
         if(this.category==="Book" || this.category==="Medical product" || this.category==="Food"){
             totalWithTax = this.price
             this.totalPrice = totalWithTax
-            console.log(this.totalPrice )
+            // purchasedItems.push({
+            //     name:this.name,
+            //     total:totalWithTax
+            // })
             return this.totalPrice
         }else{
             totalWithTax = this.price * Taxes.basicTax + this.price
             this.totalPrice = totalWithTax
            console.log(this.totalPrice )
+        //    purchasedItems.push({
+        //     name:this.name,
+        //     total:totalWithTax
+        // })
            return this.totalPrice
         }
-    }    
+    }  
+
      
 }
 
-
-console.log(purchasedItems)
-
-
-var board = new Product("Board", 100, "Book", true)
-// var byciccle = new Product("MDX", 1000, "Other", false )
-// var byciccle2 = new Product("MDX-imported", 1000, "Other", true )
-// console.log(board)
-board.calcTotal()
-// byciccle.calcTotal()
-// byciccle2.calcTotal()
-// purchasedItems.push({
-//     name:this.name,
-//     total:totalWithTax
-// })
-
+ // purchasedItems.push({
+            //     name:this.name,
+            //     total:totalWithTax
+            // })
 
 // ui contorls
 
@@ -104,12 +111,14 @@ const showTotals =()=>{
 
 const addItems = (name, price, category, imported)=>{
     console.log("items Added")
-    // code to add Items    
-    let product = new Product(name, price, category, imported)
-    let total = product.calcTotal()
-
-    console.log(total)
-    // purchasedItems.push( product)
+    let total =  new Product(
+        name, 
+        price, 
+        category, 
+        imported)
+        .calcTotal()
+        console.log(total)       
+   
 }
 
 
@@ -121,7 +130,7 @@ addButton.addEventListener('click', function(e){
     let input = getInput()
     // console.log(input)
     addItems(input.productName, parseInt(input.productPrice), input.productCategory, input.productImported)
-
+  
 })
 
 getTotals.addEventListener('click', function(e){
@@ -129,18 +138,5 @@ getTotals.addEventListener('click', function(e){
     showTotals()
 })
    
-// document.addEventListener('keypress', function(e){
-//     e.preventDefault()
-//     if(e.keyCode === 13 || e.which ===13){
-//     showTotals()
-//     }
-// })
-// document.addEventListener('keypress', function(e){
-//     e.preventDefault()
-//     console.log(e)
-//     if(e.keyCode === 43 || e.which === 43){
-//     addItems()
-//     }
-// })
-   
 
+console.log(purchasedItems)
