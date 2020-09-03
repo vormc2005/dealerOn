@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Tax</title>
+</head>
+<body>
+
+    <h2>Calculate total cost</h2>
+       <div class="container">
+          <div class="form-container">
+            <form class='form'>
+
+            <div class="form-control">
+                <label for="name" class="text-muted"> Name of the product </label>
+                    <input type="text" id='name' required/>               
+            </div>
+
+            <div class="form-control">
+                <label class="text-muted"> Price </label>
+                <input type="number" 
+                    required    
+                
+                />               
+            </div>
+
+            <div class="form-control">   
+               <label class="text-muted">Category</label>
+               <select required class='selector'>
+                   <option >Please Select</option> 
+                   <option >Book</option> 
+                   <option >Medical Product</option>
+                   <option >Food</option>
+                   <option >Other</option>
+               </select>
+            </div>
+
+            <div class="form-control">   
+                <label class="text-muted">Imported?</label>
+                <select required class='selector' >
+                    <option >Please Select</option> 
+                    <option >Yes</option> 
+                    <option >No</option>
+                </select>
+             </div>
+
+             <button class="btn btn-danger">Add product</button>
+
+             <button class="btn btn-primary">See your receipt</button>
+            </form>
+        </div>
+        </div>
+        
+
+
+
+    <script src="app.js"></script>
+</body>
+</html>
