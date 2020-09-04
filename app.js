@@ -4,7 +4,6 @@
 //Imported get 5% tax on all
 
 
-
 //variables assignment for event listeners
 var addButton = document.getElementById("add_to_list");
 var getTotals = document.getElementById("get_totals");
@@ -87,7 +86,7 @@ var salesTaxArray = []
 
 var showAddedItems = function () {    
     for (var i = 0; i < totalArray.length; i++) {
-       var receiptInfo = return {
+       var receiptInfo =  {
          prodName: totalArray[i].name,
          prodQty: totalArray[i].quantity,
          prodPrice: totalArray[i].price,
@@ -124,40 +123,47 @@ var showAddedItems = function () {
                 return sumTaxes
             },
 
-            renderInput:function(){
-                var html, newHtml
-                html=  '<div class="row" id="to_clear" ><p class="mr-2 to_clear" id="to_clear">%qty%</p><p class="mr-2 to_clear" id="to_clear"">%Name%</p><p class="mr-2 to_clear" id="to_clear"> @ %price%</p></div>'
-                    newHtml = html.replace('%Name%', this.prodName)
-                    newHtml = newHtml.replace('%qty%', this.prodQty)
-                    newHtml = newHtml.replace('%price%', this.prodPrice)    // console.log(newHtml)
-    
-                document.querySelector('#input_body').insertAdjacentHTML('beforeend', newHtml)
-            },
-            renderOutput: function(){
-                var receiptHtml, newReceiptHtml, totals, newTotals
-                receiptHtml =  ' <div class="row" id="to_clear"><p class="print_name_total mr-2" id="to_clear">%Name%</p><p class="print_total_price mr-2" id="to_clear">%totalprice%</p><p class="print_total_qty mr-2" id="to_clear">%qty*price%</p></div>' 
-                newReceiptHtml= receiptHtml.replace('%Name%', this.prodName)
-                newReceiptHtml= newReceiptHtml.replace('%totalprice%', this.totalOfProducts())
-                newReceiptHtml= newReceiptHtml.replace('%qty*price%', `${this.prodQty} @ ${this.importedPrice()}`)               
-               
-                document.querySelector('#output_body').insertAdjacentHTML('beforeend', newReceiptHtml)
-
-                totals = '<div class="salestax">%Total Sales Tax: $% </div><div class="total-sale">%Total Sale: $%</div> '
-                newTotals = totals.replace('%Total Sales Tax: $%', `Total Sales Tax: $${receiptInfo.totalOfSalesTax()}`)
-                newTotals = newTotals.replace('%Total Sale: $%', `Total Sale: $${receiptInfo.totalPriceintheArray()}`)
-                document.querySelector('#totals').insertAdjacentHTML('beforeend', newTotals)
-            }
+            
 
         }
+        receiptInfo.pushToPrices();
+        receiptInfo.pushToSalesTax();
+       
+        var html, newHtml
+        html=  '<div class="row" id="to_clear" ><p class="mr-2 to_clear" id="to_clear">%qty%</p><p class="mr-2 to_clear" id="to_clear"">%Name%</p><p class="mr-2 to_clear" id="to_clear"> @ %price%</p></div>'
+            newHtml = html.replace('%Name%', receiptInfo.prodName)
+            newHtml = newHtml.replace('%qty%', receiptInfo.prodQty)
+            newHtml = newHtml.replace('%price%', receiptInfo.prodPrice)    // console.log(newHtml)
+    
+        document.querySelector('#input_body').insertAdjacentHTML('beforeend', newHtml)
+    
+    
+        var receiptHtml, newReceiptHtml, totals, newTotals
+        receiptHtml =  ' <div class="row" id="to_clear"><p class="print_name_total mr-2" id="to_clear">%Name%</p><p class="print_total_price mr-2" id="to_clear">%totalprice%</p><p class="print_total_qty mr-2" id="to_clear">%qty*price%</p></div>' 
+        newReceiptHtml= receiptHtml.replace('%Name%', receiptInfo.prodName)
+        newReceiptHtml= newReceiptHtml.replace('%totalprice%', receiptInfo.totalOfProducts())
+        newReceiptHtml= newReceiptHtml.replace('%qty*price%', `${receiptInfo.prodQty} @ ${receiptInfo.importedPrice()}`)               
+       
+        document.querySelector('#output_body').insertAdjacentHTML('beforeend', newReceiptHtml)
+    
+       
+
+
     }
+
+    totals = '<div class="salestax">%Total Sales Tax: $% </div><div class="total-sale">%Total Sale: $%</div> '
+    newTotals = totals.replace('%Total Sales Tax: $%', `Total Sales Tax: $${receiptInfo.totalOfSalesTax()}`)
+    newTotals = newTotals.replace('%Total Sale: $%', `Total Sale: $${receiptInfo.totalPriceintheArray()+receiptInfo.totalOfSalesTax()}`)
+    document.querySelector('#totals').insertAdjacentHTML('beforeend', newTotals)
+
+
     receiptInfo.pushToPrices();
     receiptInfo.pushToSalesTax();
     // receiptInfo.totalPriceintheArray();
     // receiptInfo.totalOfSalesTax()
-    receiptInfo.renderInput()
-    receiptInfo.renderOutput()
+   
     console.log(receiptInfo)  
-   return receiptInfo
+//    return receiptInfo
 
 }
 
@@ -196,23 +202,26 @@ addButton.addEventListener('click', function (e) {
 });
 
 getTotals.addEventListener('click', function (e) {
-    e.preventDefault();    
+    e.preventDefault(); 
+    document.getElementById('output_body').innerHTML = "";
+    document.getElementById('input_body').innerHTML = "";
+    document.getElementById('totals').innerHTML = "";   
     document.getElementById("input").style.visibility = "hidden";
     document.getElementById("output").style.visibility = "visible";   
-
-   showAddedItems()    
-   
-   
-
-    
+   showAddedItems()     
     
 });
 seeAdded.addEventListener('click', function (e) {
     e.preventDefault();   
+    document.getElementById('output_body').innerHTML = "";
+    document.getElementById('input_body').innerHTML = "";
+    document.getElementById('totals').innerHTML = "";
     document.getElementById("input").style.visibility = "visible";
     document.getElementById("output").style.visibility = "hidden";    
     showAddedItems();
     
 });
 
-
+document.getElementById('output_body').innerHTML = "";
+document.getElementById('input_body').innerHTML = "";
+document.getElementById('totals').innerHTML = "";
