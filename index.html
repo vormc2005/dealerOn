@@ -12,17 +12,22 @@
     <h2>Calculate total cost</h2>
        <div class="container">
           <div class="form-container">
-            <form class='form'>
+            <form class='form' id="myForm">
 
             <div class="form-control">
                 <label for="product_name" class="text-muted"> Name of the product </label>
-                    <input class='product_name' type="text"  required/>               
+                    <input 
+                    class='product_name' 
+                    type="text" 
+                    required=true/>               
             </div>
 
             <div class="form-control">
                 <label class="text-muted"> Quantity </label>
-                <input class="product_quantity" type="number" 
-                    required    
+                <input 
+                class="product_quantity" 
+                type="number" 
+                required    
                 
                 />               
             </div>
@@ -48,7 +53,7 @@
 
             <div class="form-control">   
                 <label class="text-muted ">Imported?</label>
-                <select class='selector product_imported' >
+                <select class='selector product_imported'  >
                     <option value=''>Please Select</option> 
                     <option  value="yes">Yes</option> 
                     <option value="no" selected>No</option>
@@ -56,15 +61,46 @@
              </div>
 
              <button class="btn btn-danger " id="add_to_list">Add product</button>
-
+             <button class="btn btn-info " id="see_added">See Your Cart</button>
              <button class="submit btn btn-primary " id="get_totals">See your receipt</button>
             </form>
         </div>
         </div>
-        <div class="container receipt">
-            Receipt goes here
-        </div>
-        
+
+    <div class="container-fluid mt-5">
+        <div class="row">        
+            <div class="card col-md-3 offset-md-2" id="input">
+                <div class="card-header mt-2" >Your items</div>
+                 <div class="card-body" id="input_body"> 
+                     <!-- <div class="row" > -->
+                     <!-- <p class="mr-2">1</p>
+                    <p class="mr-2" id="prod_Name">Name</p>
+                    <p class="mr-2">$12</p>  -->
+                  <!-- </div> -->
+                </div> 
+               
+            </div>
+       
+            <div class="card col-md-3 offset-md-2" id="output">
+                <div class="card-header" >Your Receipt</div>
+                <div class="card-body" id="output_body" >
+                    <!-- <div class="row" > -->
+                    <!-- <p class="print_total_qty mr-2">1</p>
+                    <p class="print_name_total mr-2">Name</p>
+                    <p class="print_total_price mr-2">$12</p>
+                    -->
+                <!-- </div> -->
+                </div> 
+
+                <div class="card-footer text-muted">
+                     <div class="salestax">Total Sales Tax: $ </div>
+                    <div class="total-sale">Total Sale: $</div> 
+                </div>  
+
+            </div>
+           
+         </div>
+     </div>
 
 
 
