@@ -1,27 +1,30 @@
 
 
-//All taxed at 10% unles books, food and medical
-//Imported get 5% tax on all
-
-
 //variables assignment for event listeners
 var addButton = document.getElementById("add_to_list");
 var getTotals = document.getElementById("get_totals");
 var seeAdded = document.getElementById("see_added");
+var reset =document.getElementById("resetButton");
 // query selectors, form fileds selection
-var getInput = function () {
+var getInput =  ()=> {
     return {
         productName: (<HTMLInputElement>document.querySelector('.product_name')).value,
         productPrice: (<HTMLInputElement>document.querySelector('.product_price')).value,
         productCategory: (<HTMLInputElement>document.querySelector('.product_category')).value,
         productImported: (<HTMLInputElement>document.querySelector('.product_imported')).value,
-        productQuantity: (<HTMLInputElement>document.querySelector('.product_quantity')).value,
-        inputBody: '.input_body'
+        productQuantity: (<HTMLInputElement>document.querySelector('.product_quantity')).value
+       
     };
 };
-var input = getInput();
+//Array for output and render
+var priceArray = [];
+var salesTaxArray = [];
+var receiptArray =[]
 var totalArray = [];
+//Global variables
+var input = getInput();
 var totalWithTax;
+
 //Assigning tax amounts
 var Taxes = {
     basicTax: 0.1,
@@ -30,8 +33,13 @@ var Taxes = {
 // toggle receipt visibility
 document.getElementById("input").style.visibility = "hidden";
 document.getElementById("output").style.visibility = "hidden";
+document.getElementById("reset_warning").style.visibility = "hidden";
 //Creating object with product
-var Product = function (quantity, name, price, category, imported) {
+
+
+
+//Object with methods to check adequate taxes
+var Product = (quantity:number, name:string, price:number, category:string, imported:string) =>{
     this.quantity = quantity;
     this.name = name;
     this.price = price;
@@ -58,7 +66,6 @@ Product.prototype.calcSalesTax = function () {
 Product.prototype.calcImport = function () {
     var totalValue = this.price * this.quantity;
     var totalImportTax = totalValue * Taxes.importTax;
-   
     if (this.imported === "yes") {
         this.importTax = totalImportTax;
         // console.log(this.importTax);
@@ -70,154 +77,179 @@ Product.prototype.calcImport = function () {
         return this.importTax;
     }
 };
-// ui contorls
-// 1. Set up Event listeners
-// 2. get values from the fields
-// 3. Pass values to a new object
-//4. Render values: names and totals
 
 
+// const ReceiptInfo = (name:string, quantity:number, price:number, importPrice:number)=>{
+//     this.name =name;
+//     this.quantity = quantity;
+//     this.price = price;
+//     this.importPrice = importPrice
+
+// }
 
 
-var priceArray = []
-var salesTaxArray = []
 
 //Loop trhough array of objects and get information that is needed
-
-var showAddedItems = function () {    
+var showAddedItems = function () {
     for (var i = 0; i < totalArray.length; i++) {
-       var receiptInfo =  {
-         prodName: totalArray[i].name,
-         prodQty: totalArray[i].quantity,
-         prodPrice: totalArray[i].price,
-      //round to nearest 0.05 cents
-         prodSalesTax: parseFloat((Math.ceil(totalArray[i].totalSalesTax*20-0.5)/20).toFixed(2)),       
-         prodImportTax: parseFloat((Math.ceil(totalArray[i].importTax*20-0.5)/20).toFixed(2)),       
-//calculations
-         importedPrice: function(){return this.prodPrice+this.prodImportTax},
-         totalOfProducts: function(){ return this.prodQty*this.prodPrice+this.prodImportTax},
-            pushToPrices: function(){ 
-                priceArray.push(this.totalOfProducts())
-                console.log(priceArray)            
-            },
-            pushToSalesTax: function(){
-                salesTaxArray.push(this.prodSalesTax)
-                console.log(salesTaxArray)
-            },
-
-            totalPriceintheArray: function(){
-                var sumPrices = 0
-                for(var i= 0; i< priceArray.length; i++){
-                    sumPrices += priceArray[i]
-                }
-                console.log(sumPrices)
-                return sumPrices
-            },
-
-            totalOfSalesTax: function(){
-                var sumTaxes = 0
-                for(var i= 0; i< salesTaxArray.length; i++){
-                    sumTaxes += salesTaxArray[i]
-                }
-                console.log(sumTaxes)
-                return sumTaxes
-            },
-
-            
-
-        }
-
-        receiptInfo.pushToPrices();
-        receiptInfo.pushToSalesTax();
-    //    ************************************Render receipt and Input**************************************/////////
-        var html, newHtml
-        html=  '<div class="row" id="to_clear" ><p class="mr-2 to_clear" id="to_clear">%qty%</p><p class="mr-2 to_clear" id="to_clear"">%Name%</p><p class="mr-2 to_clear" id="to_clear"> @ %price%</p></div>'
-            newHtml = html.replace('%Name%', receiptInfo.prodName)
-            newHtml = newHtml.replace('%qty%', receiptInfo.prodQty)
-            newHtml = newHtml.replace('%price%', `$${receiptInfo.prodPrice}`)    // console.log(newHtml)
-    
-        document.querySelector('#input_body').insertAdjacentHTML('beforeend', newHtml)
-    
-    
-        var receiptHtml, newReceiptHtml, totals, newTotals
-        receiptHtml =  ' <div class="row" id="to_clear"><p class="print_name_total mr-2" id="to_clear">%Name%</p><p class="print_total_price mr-2" id="to_clear">%totalprice%</p><p class="print_total_qty mr-2" id="to_clear">%qty*price%</p></div>' 
-        newReceiptHtml= receiptHtml.replace('%Name%', receiptInfo.prodName)
-        newReceiptHtml= newReceiptHtml.replace('%totalprice%', receiptInfo.totalOfProducts())
-        newReceiptHtml= newReceiptHtml.replace('%qty*price%', `${receiptInfo.prodQty} @ $${receiptInfo.importedPrice()}`)               
+        var totalOfPrices = 0
+        var totalOfSalesTax = 0
+        var prodName= totalArray[i].name;
+        var prodQty= totalArray[i].quantity;
+        var prodPrice= parseFloat(totalArray[i].price);
+        var prodSalesTax =  parseFloat(totalArray[i].totalSalesTax);
+        var prodImportTax = totalArray[i].importTax;
+        var totalImportPrice = totalArray[i].totalimport         
        
-        document.querySelector('#output_body').insertAdjacentHTML('beforeend', newReceiptHtml) 
+        totalOfSalesTax +=prodSalesTax
+        totalOfPrices +=  totalImportPrice 
+        // console.log (totalOfPrices)
+        priceArray.push(totalOfPrices)
+            console.log(priceArray);   
+          
+        salesTaxArray.push(totalOfSalesTax);
+            console.log(salesTaxArray);  
+           
+
        
+         //*****************Render receipt*************************************** */
+         renderReceipt(prodName, totalImportPrice, prodQty, prodPrice, prodImportTax)
+        
+    }   
+    console.log(totalImportPrice)
+    console.log(prodPrice)
+};
 
-
-    }
-//**********************************************Render total sales tax and total price
-    totals = '<div class="salestax">%Total Sales Tax: $% </div><div class="total-sale">%Total Sale: $%</div> '
-    newTotals = totals.replace('%Total Sales Tax: $%', `Total Sales Tax: $${receiptInfo.totalOfSalesTax()}`)
-    newTotals = newTotals.replace('%Total Sale: $%', `Total Sale: $${receiptInfo.totalPriceintheArray()+receiptInfo.totalOfSalesTax()}`)
-    document.querySelector('#totals').insertAdjacentHTML('beforeend', newTotals)
-
-
-    receiptInfo.pushToPrices();
-    receiptInfo.pushToSalesTax();
-  
-   
-    console.log(receiptInfo)  
-
-
-}
 
 //***Adding items here then in goes to a Product object, wehre it determines taxes******************************* */
-
-var addItems = function (quantity:any, name: string, price:number, category:string, imported:string) {
+const addItems = (quantity: any, name:string, price:number, category:string, imported:string)=>{
     if (quantity === "NaN" || name === '') {
         return alert("All fields need to bbe filled in!");
     }
     else {
         var totalSalesTax = new Product(quantity, name, price, category, imported).calcSalesTax();
         var importTax = new Product(quantity, name, price, category, imported).calcImport();
-        // console.log(totalSalesTax);
-        // console.log(importTax);
+        
         //pushing items to array for a final calculations
         totalArray.push({
             quantity: quantity,
             name: name,
             price: price,
-            totalSalesTax: totalSalesTax,
-            importTax: importTax
+            totalSalesTax: (Math.ceil((totalSalesTax) * 20 - 0.5) / 20),
+            importTax: (Math.ceil((importTax) * 20 - 0.5) / 20),
+            importPrice:  (price + importTax),
+            totalimport:  price * quantity + importTax
+            
+
         });
-        document.getElementById("myForm").reset();
-        console.log(totalArray);
-        alert("Your item was saved! Please add another on or choose other ooptions!");
+        
+        // parseFloat((Math.ceil((importTax) * 20 - 0.5) / 20).toFixed(2))
+        //**********************Render shopping list*****************************
+        renderInputs(name, quantity, price)       
     }
 };
+
+//***Calculating total in price array and sales tax array */
+
+const totalPriceintheArray= ()=> {
+    if(priceArray.length){
+        var sumPrices = 0
+        for (var i = 0; i < priceArray.length; i++) {
+            sumPrices += priceArray[i];
+        }
+        console.log(sumPrices);
+
+    return sumPrices;
+
+    }
+    else{
+        return
+    }
+    }
+
+   
+
+const totalOfSalesTax= () =>{
+    if(!salesTaxArray.length){
+        return
+    }else{
+        var sumTaxes = 0;
+        for (var i = 0; i < salesTaxArray.length; i++) {
+            sumTaxes += salesTaxArray[i];
+        }
+        console.log(sumTaxes);
+        
+        return sumTaxes;
+    }
+   
+}
+//************************************************************************************************************************************ */
+//********************************RENDER FUNCTIONS************************************************************************************* */
+//**********************************************Render total sales tax and total price
+const renderTotal =()=>{
+    var totals, newTotals;
+
+    totals = '<div class="salestax">%Total Sales Tax: $% </div><div class="total-sale">%Total Sale: $%</div> ';
+    newTotals = totals.replace('%Total Sales Tax: $%', "Total Sales Tax: $" + totalOfSalesTax().toFixed(2));
+    newTotals = newTotals.replace('%Total Sale: $%', "Total Sale: $" + (totalPriceintheArray() + totalOfSalesTax()).toFixed(2));
+    document.querySelector('#totals').insertAdjacentHTML('beforeend', newTotals);
+}
+//Render inputs left side
+const renderInputs = (name:string, quantity:number, price:number)=>{
+    var html, newHtml
+    html = '<div class="row" id="to_clear" ><p class="mr-2 to_clear" id="to_clear">%qty%</p><p class="mr-2 to_clear" id="to_clear"">%Name%</p><p class="mr-2 to_clear" id="to_clear"> @ %price%</p></div>';
+    newHtml = html.replace('%Name%', name);
+    newHtml = newHtml.replace('%qty%', quantity);
+    newHtml = newHtml.replace('%price%', "$" + price.toFixed(2)); // console.log(newHtml)
+    document.querySelector('#input_body').insertAdjacentHTML('beforeend', newHtml);
+
+    document.getElementById("myForm").reset();
+    console.log(totalArray);
+    alert("Your item was saved! Please add another on or choose other ooptions!");
+}
+//render final receipt
+const renderReceipt = (prodName:string, totalImportPrice:number, prodQty:number, prodPrice:number, prodImportTax:number)=>{
+    var receiptHtml, newReceiptHtml
+    receiptHtml = ' <div class="row" id="to_clear"><p class="print_name_total mr-2" id="to_clear">%Name%</p><p class="print_total_price mr-2" id="to_clear">%totalprice%</p><p class="print_total_qty mr-2" id="to_clear">%qty*price%</p></div>';
+    newReceiptHtml = receiptHtml.replace('%Name%', prodName);
+    newReceiptHtml = newReceiptHtml.replace('%totalprice%', (prodPrice+prodImportTax).toFixed(2));
+    if(prodQty > 1){
+        newReceiptHtml = newReceiptHtml.replace('%qty*price%', prodQty + " @ $" + (prodPrice).toFixed(2))
+    }else{
+     newReceiptHtml = newReceiptHtml.replace('%qty*price%', "$" + (prodPrice).toFixed(2))
+    }
+
+    document.querySelector('#output_body').insertAdjacentHTML('beforeend', newReceiptHtml);
+}
+
 //*******************************************************Event listeners*******************************************************//
+
+//Add Product button
 addButton.addEventListener('click', function (e) {
     e.preventDefault();
-    // document.getElementById("input").style.visibility = "hidden";
+    document.getElementById("input").style.visibility = "visible";
     document.getElementById("output").style.visibility = "hidden";
     var input = getInput();
     // console.log(input)
     addItems(parseInt(input.productQuantity), input.productName, parseFloat(input.productPrice), input.productCategory, input.productImported);
-});
 
-getTotals.addEventListener('click', function (e) {
-    e.preventDefault(); 
-    document.getElementById('output_body').innerHTML = "";
-    document.getElementById('input_body').innerHTML = "";
-    document.getElementById('totals').innerHTML = "";   
-    document.getElementById("input").style.visibility = "hidden";
-    document.getElementById("output").style.visibility = "visible";   
-   showAddedItems()     
-    
 });
-seeAdded.addEventListener('click', function (e) {
-    e.preventDefault();   
+//Show Receipt button
+getTotals.addEventListener('click', function (e) {
+    e.preventDefault();
     document.getElementById('output_body').innerHTML = "";
     document.getElementById('input_body').innerHTML = "";
     document.getElementById('totals').innerHTML = "";
-    document.getElementById("input").style.visibility = "visible";
-    document.getElementById("output").style.visibility = "hidden";    
-    showAddedItems();
-    
+    document.getElementById("input").style.visibility = "hidden";
+    document.getElementById("output").style.visibility = "visible";
+    // document.getElementById("get_totals").style.visibility = "hidden";
+    document.getElementById("hide_unhide").style.visibility = "hidden";
+    document.getElementById("reset_warning").style.visibility = "visible";
+    showAddedItems();    
+    renderTotal()
 });
 
+reset.addEventListener('click', function (e) {
+    e.preventDefault();
+   location.reload()
+});

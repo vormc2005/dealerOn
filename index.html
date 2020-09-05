@@ -13,8 +13,7 @@
    <div class="container list">
     <ol>
         <li>Fill the form out</li>
-        <li>Click Add Product</li>
-        <li>Choose between See your Cart or See your receipt</li>
+        <li>Click Add Product</li>       
         <li>Click on the button of your choice</li>
     </ol>
 </div>
@@ -67,9 +66,13 @@
                     <option value="no" selected>No</option>
                 </select>
              </div>
-             <div class="button-group">
+             <div class="button-group" id="hide_unhide">                
+                 <p class="rese-warning" id="reset_warning">
+                    Plese hit reset to build a new receipt
+                 </p>       
+                 
                 <button class="btn btn-danger " id="add_to_list">Add product</button>
-                <button class="btn btn-info " id="see_added">See Your Cart</button>
+                <!-- <button class="btn btn-info " id="see_added">See Your Cart</button> -->
                 <button class="submit btn btn-primary " id="get_totals">See your receipt</button>
             </div>
                 <Button class="btn btn-secondary" style="width: 100%"  id='resetButton'>Reset</button>
