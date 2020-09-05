@@ -10,4 +10,7 @@ To get a receipt customers to need to do the following.
 1. Fill out a form with the name of the product, quantity, price, choose a product category, and choose if the product was imported or not.
 2. Add product to a list
 3. Click on the "See you receipt" button
-4. View receipt 
+4. View receipt
+
+
+![](Application.gif)
