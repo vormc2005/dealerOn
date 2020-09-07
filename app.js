@@ -71,11 +71,9 @@ Product.prototype.calcImport = function () {
         return this.importTax;
     }
 };
-
-
 //Loop trhough array of objects and get information that is needed
 var showAddedItems = function () {
-    if(totalArray.length){
+    if (totalArray.length) {
         for (var i = 0; i < totalArray.length; i++) {
             var totalOfPrices = 0;
             var totalOfSalesTax = 0;
@@ -96,14 +94,12 @@ var showAddedItems = function () {
             renderReceipt(prodName, totalImportPrice, prodQty, prodPrice, prodImportTax);
             document.getElementById("output").style.visibility = "visible";
         }
-
     }
     else {
-        alert("Please click 'Add product' first")
+        alert("Please click 'Add product' first");
         document.getElementById("output").style.visibility = "hidden";
-        return
+        return;
     }
-    
     console.log(totalImportPrice);
     console.log(prodPrice);
 };
@@ -128,13 +124,11 @@ var addItems = function (quantity, name, price, category, imported) {
         });
         // parseFloat((Math.ceil((importTax) * 20 - 0.5) / 20).toFixed(2))
         //**********************Render shopping list*****************************
-        console.log(totalArray)
+        console.log(totalArray);
         document.getElementById("input").style.visibility = "visible";
         renderInputs(name, quantity, price);
     }
 };
-
-
 //***Calculating total in price array and sales tax array */
 var totalPriceintheArray = function () {
     if (priceArray.length) {
@@ -187,17 +181,16 @@ var renderInputs = function (name, quantity, price) {
 //render final receipt
 var renderReceipt = function (prodName, totalImportPrice, prodQty, prodPrice, prodImportTax) {
     var receiptHtml, newReceiptHtml;
-    var importPriceOutput = prodPrice+(prodImportTax)/(prodQty)
+    var importPriceOutput = prodPrice + (prodImportTax) / (prodQty);
     receiptHtml = ' <div class="row" id="to_clear"><p class="print_name_total mr-2" id="to_clear">%Name%</p><p class="print_total_price mr-2" id="to_clear">%totalprice%</p><p class="print_total_qty mr-2" id="to_clear">%qty*price%</p></div>';
     newReceiptHtml = receiptHtml.replace('%Name%', prodName);
-    
-    newReceiptHtml = newReceiptHtml.replace('%totalprice%', totalImportPrice.toFixed(2));
-    if(totalImportPrice && prodQty > 1){
-        newReceiptHtml = newReceiptHtml.replace('%qty*price%', prodQty + " @ $" +  parseFloat(importPriceOutput).toFixed(2));
+    newReceiptHtml = newReceiptHtml.replace('%totalprice%', '$' + totalImportPrice.toFixed(2));
+    if (totalImportPrice && prodQty > 1) {
+        newReceiptHtml = newReceiptHtml.replace('%qty*price%', prodQty + " @ $" + parseFloat(importPriceOutput).toFixed(2));
     }
-    else  if(totalImportPrice){
+    else if (totalImportPrice) {
         newReceiptHtml = newReceiptHtml.replace('%qty*price%', "");
-     }    
+    }
     else if (prodQty > 1) {
         newReceiptHtml = newReceiptHtml.replace('%qty*price%', prodQty + " @ $" + (prodPrice).toFixed(2));
     }
@@ -222,7 +215,7 @@ getTotals.addEventListener('click', function (e) {
     document.getElementById('output_body').innerHTML = "";
     document.getElementById('input_body').innerHTML = "";
     document.getElementById('totals').innerHTML = "";
-    document.getElementById("input").style.visibility = "hidden";    
+    document.getElementById("input").style.visibility = "hidden";
     // document.getElementById("get_totals").style.visibility = "hidden";
     document.getElementById("hide_unhide").style.visibility = "hidden";
     document.getElementById("reset_warning").style.visibility = "visible";
